@@ -1,0 +1,10 @@
+{% extends 'files/base.html' %}
+
+{% block content %}
+    <h1>Share Folder</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Share</button>
+    </form>
+{% endblock %}
