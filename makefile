@@ -1,14 +1,14 @@
-docker.build:
-	docker-compose build --force-rm
+deploy-migrate: ## Run manage migrate
+	python3 manage.py makemigrations
+	python3 manage.py migrate
 
-docker.start:
-	docker-compose up -d
+deploy-update: ## DEPLOY - Runs poetry update
+	poetry update
 
-install:
-	poetry install
+test: ## TEST - Runs server on 8000
+	poetry run python manage.py runserver
 
-activate: install
-	poetry shell
 
-start: activate
-	poetry run
+
+
+
