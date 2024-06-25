@@ -16,10 +16,12 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from files import views
 from django.urls import include, path
 
 urlpatterns = [
-    path('admin', admin.site.urls),
-    path('files/', include('files.urls', namespace="files")),
-    path('users/', include('users.urls')),
+    path('admin/', admin.site.urls ),
+    path('', views.HomePageView.as_view(), name='files:index'),
+    path('files/', include('files.urls', namespace='files')),
+    path('users/', include('users.urls', namespace='users')),
 ]
