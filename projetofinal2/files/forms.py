@@ -4,12 +4,12 @@ from.models import File, Folder, Share
 class FileForm(forms.ModelForm):
     class Meta:
         model = File
-        fields = ('name', 'file')
+        fields = ('file', 'folder', )
 
 class FolderForm(forms.ModelForm):
     class Meta:
         model = Folder
-        fields = ('name',)
+        fields = ('name', 'parent_folder', )
 
 class ShareForm(forms.ModelForm):
     class Meta:

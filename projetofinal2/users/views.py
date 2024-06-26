@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth.forms import AuthenticationForm
 import logging
 
@@ -42,25 +42,23 @@ class LogInView(View):
             username = request.POST.get("username")
             password = request.POST.get("password")
 
-            if not username or not password:
-                return render(
-                    request=request, 
-                    template_name="login.html", 
-                    context={}
-                )
             user = authenticate(request, username=username, password=password)
 
             if user:
                 auth_login(user=user, request=request)
                 return redirect("files:index")
             
-            return redirect("login")
-
+            if user.is_staff:
+                return redirect(reverse('admin:index'))
+            return redirect('files:index')
         form = AuthenticationForm()
 
         return render(request, 'login.html', {'form': form})
 
 class LogOutView(View):
     def get(self, request):
+        return render(request, "logout.html")
+
+    def post(self, request):
         auth_logout(request)
-        return redirect('users:login')
+        return redirect("users:login")

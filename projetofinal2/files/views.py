@@ -1,8 +1,9 @@
-from django.shortcuts import render, redirect
+from django.http import HttpResponse, HttpResponseForbidden
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from.forms import FileForm, FolderForm, ShareForm
-from.models import Folder, File, Share
+from.models import Folder, File
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -28,15 +29,24 @@ class UploadFileView(LoginRequiredMixin, View):
             return redirect('files:index')
         return render(request, 'upload.html', {'form': form})
 
+class DownloadFileView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        uploaded_file = get_object_or_404(File, owner=request.user)
+        response = HttpResponse(uploaded_file.file, content_type='application/octet-stream')
+        response['Content-Disposition'] = f'attachment; filename="{uploaded_file.file.name}"'
+        return response
+
 class CreateFolderView(LoginRequiredMixin, View):
     def get(self, request):
         form = FolderForm()
         return render(request, 'create_folder.html', {'form': form})
     
     def post(self, request):
+        parent_folder = None
         form = FolderForm(request.POST)
         if form.is_valid():
             folder = form.save(commit=False)
+            folder.parent = parent_folder
             folder.owner = request.user
             folder.save()
             return redirect('files:index')
@@ -48,20 +58,19 @@ class DeleteFileView(LoginRequiredMixin, View):
         file.delete()
         return redirect('files:index')
 
-#     # def delete_folder(request, pk):
-#     #     folder = Folder.objects.get(pk=pk)
-#     #     folder.delete()
-#     #     return redirect('index')
+class DeleteFolderView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        folder = Folder.objects.get(pk=pk)
+        folder.delete()
+        return redirect('files:index')
 
-#     # def share_folder(request, pk):
-#     #     folder = Folder.objects.get(pk=pk)
-#     #     if request.method == 'POST':
-#     #         form = ShareForm(request.POST)
-#     #         if form.is_valid():
-#     #             share = form.save(commit=False)
-#     #             share.folder = folder
-#     #             share.save()
-#     #             return redirect('index')
-#     #     else:
-#     #         form = ShareForm()
-#     #     return render(request, 'share.html', {'form': form, 'folder': folder})
+class ShareFolderView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        folder = Folder.objects.get(pk=pk)
+        form = ShareForm(request.POST)
+        if form.is_valid():
+            share = form.save(commit=False)
+            share.folder = folder
+            share.save()
+            return redirect('files:index')
+        return render(request, 'share.html', {'form': form, 'folder': folder})

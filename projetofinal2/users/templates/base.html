@@ -2,20 +2,19 @@
 <html>
 <head>
     <title>Files App</title>
-    <link rel="stylesheet" href="{% static 'files/css/style.css' %}">
+    <link rel="stylesheet" href="'static/styles.css'">
 </head>
 <body>
     <nav>
         <ul>
             <li><a href="{% url 'files:index' %}">Home</a></li>
-            <li><a href="{% url 'files:upload_file' %}">Upload File</a></li>
+            <li><a href="{% url 'files:upload' %}">Upload File</a></li>
             <li><a href="{% url 'files:create_folder' %}">Create Folder</a></li>
-            <li><a href="{% url 'logout' %}">Logout</a></li>
+            <li><a href="{% url 'users:logout' %}">Logout</a></li>
         </ul>
     </nav>
     <div class="container">
         {% block content %}{% endblock %}
     </div>
-    <script src="{% static 'files/js/script.js' %}"></script>
 </body>
 </html>

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}  
+
+{% block content %}
+  <h1>Download File</h1>
+
+  {% if files %}
+    <ul>
+      {% for file in files %}
+        <li>
+          {{ file.name }} ({{ file.file.size|filesizeformat }})
+          <a href="{% url 'files:download_file' file.pk %}">Download</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No files available for download.</p>
+  {% endif %}
+
+{% endblock %}
