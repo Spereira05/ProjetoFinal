@@ -6,9 +6,8 @@
     <input type="text" id="username" name="username" placeholder="Username" required />
     <input type="password" id="password" name="password" placeholder="password" required />
     <button type="submit">Login</button>
+    <h3>Not registered?<a href="{% url 'users:register' %}">Register Here!</a></h3>
+    <a href="{% url 'users:password_reset' %}"><i>Forgot Password?</i></a>
   </form>
-  {% if errors.login_error %}
-    <p>{{ errors.login_error }}</p>
-  {% endif %}
 {% endblock %}
 

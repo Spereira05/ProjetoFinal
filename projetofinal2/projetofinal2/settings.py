@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,7 +30,12 @@ ALLOWED_HOSTS = []
 
 LOGIN_URL = 'users:login'
 
-
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'vieirasantiago205@gmail.com'
+EMAIL_HOST_PASSWORD = 'mzkx jsfh uksk yljv'
 # Application definition
 
 INSTALLED_APPS = [
