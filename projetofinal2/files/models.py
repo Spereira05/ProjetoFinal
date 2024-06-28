@@ -1,16 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class Folder(models.Model):
     app_label = "files"
     name = models.CharField(max_length=255)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     parent_folder = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
+    def subfolders(self):
+        return Folder.objects.filter(parent_folder=self)
+
     def __str__(self):
         return self.name
-    
+
 class File(models.Model):
     app_label = "files"
     name = models.CharField(max_length=255)
@@ -20,7 +22,4 @@ class File(models.Model):
 
     def __str__(self):
         return self.name
-    
-class Share(models.Model):
-    folder = models.ForeignKey(Folder, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+

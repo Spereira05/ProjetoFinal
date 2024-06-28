@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Files and Folders</h1>
+    <ul>
+        {% for folder in folders %}
+            <li>{{ folder.name }} (Folder)</li>
+        {% endfor %}
+        {% for file in files %}
+            <li>{{ file.name }} (File) <a href="{% url 'files:delete_file' file.pk %}">Delete</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

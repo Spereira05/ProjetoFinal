@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Root Folder</h1>
+  <ul>
+    {% for folder in folders %}
+      <li>
+        <a href="{% url 'files:folder' folder.id %}">{{ folder.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  <h2>Files</h2>
+  <ul>
+    {% for file in files %}
+      <li>
+        <a href="{% url 'files:download' file.id %}">{{ file.name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}
+

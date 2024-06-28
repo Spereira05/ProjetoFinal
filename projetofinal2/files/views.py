@@ -1,8 +1,8 @@
-from django.http import HttpResponse, HttpResponseForbidden
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
-from.forms import FileForm, FolderForm, ShareForm
+from.forms import FileForm, FolderForm
 from.models import Folder, File
 import logging
 
@@ -64,13 +64,3 @@ class DeleteFolderView(LoginRequiredMixin, View):
         folder.delete()
         return redirect('files:index')
 
-class ShareFolderView(LoginRequiredMixin, View):
-    def get(self, request, pk):
-        folder = Folder.objects.get(pk=pk)
-        form = ShareForm(request.POST)
-        if form.is_valid():
-            share = form.save(commit=False)
-            share.folder = folder
-            share.save()
-            return redirect('files:index')
-        return render(request, 'share.html', {'form': form, 'folder': folder})
